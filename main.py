@@ -64,7 +64,6 @@ def log_init():
 
 def update_config():
     global config
-
     config = {
         "whereami": whereami,
         "reference_pos": (reference_row, reference_col),
@@ -166,12 +165,12 @@ def cell_fill():
 def data_validation_fill():
     is_finished = False
     if field_validation('该项目为空'):
-        selected_cell = driver.find_element(By.CLASS_NAME, 'dui-select-text-container')
-        selected_cell.click()
-        time.sleep(1)
+        ActionChains(driver).key_down(Keys.SPACE).perform()
+        time.sleep(0.8)
         ActionChains(driver).key_down(Keys.DOWN).key_down(Keys.DOWN).perform()
-        time.sleep(1)
+        time.sleep(0.8)
         ActionChains(driver).key_down(Keys.ENTER).perform()
+        get_focus()
         if field_validation("已做核酸"):
             is_finished = True
     elif field_validation("已做核酸"):
@@ -351,15 +350,16 @@ def cookies_validation():
 
 def get_cookies():
     global cookies
+    driver.refresh()  # 先刷新界面
+    time.sleep(1)
     try:
-        # driver.refresh()  # 先刷新界面
         cookies = driver.get_cookies()
         logger.info(cookies)  # 获得cookie并打印
         return cookies
 
     except Exception as e:
         logger.warning("cookies获取失败")
-        logger.info(repr(e))
+        logger.warning(repr(e))
         print("cookies获取失败，请检查是否登陆了QQ")
 
 
@@ -437,6 +437,10 @@ def move_right():
     ActionChains(driver).key_down(Keys.RIGHT).perform()
 
 
+def get_focus():
+    driver.find_element(By.ID, 'alloy-simple-text-editor').click()
+
+
 def user_service(user):
     user = dict(sorted(user.items(), key=lambda x: x[1]))
     step = 0
@@ -448,7 +452,7 @@ def user_service(user):
             if cell_fill():
                 print(f"\x1b[1;37;44m用户`{user_list[i]}`签到已完成\x1b[0m")
 
-        if step_list[i] > 0:
+        elif step_list[i] > 0:
             step = abs(step_list[i])
             for j in range(step):
                 move_down()
@@ -456,7 +460,7 @@ def user_service(user):
             if cell_fill():
                 print(f"\x1b[1;37;44m用户`{user_list[i]}`签到已完成\x1b[0m")
 
-        if step_list[i] < 0:
+        elif step_list[i] < 0:
             step = abs(step_list[i])
             for j in range(step):
                 move_up()
@@ -476,7 +480,10 @@ if __name__ == '__main__':
         datetime.datetime.now().day)
     today_validation = f'{date.today().month}月{date.today().day}日'
 
-    driver = webdriver.Chrome()
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--ignore-certificate-errors')
+    # driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Edge()
     driver.get(doc_url)  # 将健康表的地址copy过来就行。
 
     if cookies_validation():
@@ -484,21 +491,23 @@ if __name__ == '__main__':
     else:
         login_method(1, driver)
         get_cookies()
+        time.sleep(1)
         update_config()
 
     time.sleep(1)
 
     position_redirection()
 
-    print("开始验证初始化位置正确性")
-    if position_validation():
-        print("验证成功")
-        update_config()
+    # print("开始验证初始化位置正确性")
+    # if position_validation():
+    #     print("验证成功")
+    #     update_config()
 
     user_service(registered_user)
-    driver.refresh() # 刷新一下，防止出现问题
     time.sleep(1)
     get_cookies()
+    time.sleep(5)
+    update_config()
     save_config()
     os.system('pause')
     driver.quit()
