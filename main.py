@@ -34,7 +34,8 @@ registered_user = {
     "聂博洋": 0,
     "唐海成": 1,
     "李文锋": 2,
-    "高泽森": -2
+    "高泽森": -2,
+    "卢国浩": 13
 }
 
 
@@ -234,7 +235,7 @@ def column_redirection():
             pbar.set_postfix(text=get_cell(), row=x, column=y)
             pbar.update(75 / cost)
 
-        print("Success")
+
 
     time.sleep(0.1)
     logger.info(f"移动完成的位置是：{get_cell()}")
@@ -253,6 +254,8 @@ def row_redirection(p):
 
 def position_redirection():
     column_redirection()
+    time.sleep(0.5)
+    print("Success")
     row_redirection(whereami)
     print('位置初始化完成')
 
@@ -482,8 +485,8 @@ if __name__ == '__main__':
 
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--ignore-certificate-errors')
-    # driver = webdriver.Chrome(options=chrome_options)
-    driver = webdriver.Edge()
+    driver = webdriver.Chrome(options=chrome_options)
+    # driver = webdriver.Edge()
     driver.get(doc_url)  # 将健康表的地址copy过来就行。
 
     if cookies_validation():
@@ -498,16 +501,15 @@ if __name__ == '__main__':
 
     position_redirection()
 
-    # print("开始验证初始化位置正确性")
-    # if position_validation():
-    #     print("验证成功")
-    #     update_config()
+    print("开始验证初始化位置正确性")
+    if position_validation():
+        print("验证成功")
+        update_config()
 
     user_service(registered_user)
     time.sleep(1)
     get_cookies()
     time.sleep(5)
-    update_config()
     save_config()
     os.system('pause')
     driver.quit()
