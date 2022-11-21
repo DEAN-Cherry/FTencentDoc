@@ -66,7 +66,8 @@ And here is a more general way is to run the script
 ```
 
 具体函数的作用请参考代码，所有函数列表如下
-![img_1.png](img_1.png)
+![图片](https://user-images.githubusercontent.com/76607677/203082228-333bd0b0-e5c0-482b-a334-37121229201e.png)
+
 
 
 ## Others
