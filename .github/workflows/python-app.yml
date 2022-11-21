@@ -16,9 +16,6 @@ jobs:
   hpc_job:
     name: 注册唯一性检验
     runs-on: windows 10/11 22H2
-  build:
-
-    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
