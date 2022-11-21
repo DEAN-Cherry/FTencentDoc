@@ -3,23 +3,24 @@
 # 按 Shift+F10 执行或将其替换为您的代码。
 # 按 双击 Shift 在所有地方搜索类、文件、工具窗口、操作和设置。
 
-import logging
-import time
-import datetime
-from datetime import date
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
 # import win32clipboard as w
 # import win32con
 import base64
+import datetime
 import json
+import logging
 import os
+import time
+from datetime import date
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from tqdm import tqdm, trange
-from colorama import Fore
+from webdriver_manager.chrome import ChromeDriverManager
+
 path = os.path.dirname(__file__)
 cookies = []
 whereami = 206
