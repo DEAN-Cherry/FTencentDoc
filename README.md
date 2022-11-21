@@ -36,6 +36,9 @@ And here is a more general way is to run the script
 python register.py
 ```
 
+![图片](https://user-images.githubusercontent.com/76607677/203083960-73f64b8f-0e61-451c-9989-ae370996d956.png)
+
+
 
 ## Info
 
