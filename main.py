@@ -11,14 +11,16 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
-import win32clipboard as w
-import win32con
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
+# import win32clipboard as w
+# import win32con
 import base64
 import json
 import os
 from tqdm import tqdm, trange
 from colorama import Fore
-
+path = os.path.dirname(__file__)
 cookies = []
 whereami = 206
 doc_url = 'https://docs.qq.com/sheet/DZEx4eFBrYVNSb3di?tab=BB08J2&u=d4e0a9ea21c04264806e482dadeb398a'
@@ -43,7 +45,8 @@ def log_init():
     log = logging.getLogger()
     log.setLevel(logging.INFO)
     rq = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-    log_path = os.getcwd() + '/logs/'
+    # log_path = os.getcwd() + '/logs/'
+    log_path = os.path.dirname(__file__) + '/logs/'
     log_name = log_path + rq + '.log'
     logfile = log_name
     fh = logging.FileHandler(logfile)
@@ -78,7 +81,7 @@ def update_config():
 def save_config():
     global config
     update_config()
-    tf = open("localConfig.json", 'w')
+    tf = open(f"{path}/localConfig.json", 'w')
     json.dump(config, tf)
     tf.close()
     print("config 已保存")
@@ -86,7 +89,7 @@ def save_config():
 
 def load_config():
     global whereami, reference_row, reference_col, doc_url, registered_user, cookies
-    tf = open("localConfig.json", "r")
+    tf = open(f"{path}/localConfig.json", "r")
     new_dict = json.load(tf)
     k = [i for i in new_dict]
 
@@ -99,36 +102,36 @@ def load_config():
     return new_dict, k
 
 
-def get_text():
-    time.sleep(1)
-    w.OpenClipboard()
-    is_available = True
-
-    try:
-        w.GetClipboardData(win32con.CF_TEXT)
-    except Exception as e:
-        print(e)
-        is_available = False
-
-    if is_available:
-        text = w.GetClipboardData(win32con.CF_TEXT)
-    else:
-        text = '该项目为空'.encode('gbk', 'xmlcharrefrepalce')
-
-    w.CloseClipboard()
-    return text.decode('gbk')
-
-
-def set_text(a):
-    w.OpenClipboard()
-    w.EmptyClipboard()
-    w.SetClipboardData(win32con.CF_TEXT, a)
-    w.CloseClipboard()
-
-
-def copy_cell():
-    ActionChains(driver).key_down(Keys.CONTROL).key_down('c').key_up(Keys.CONTROL).key_up('c').perform()
-    return get_text()
+# def get_text():
+#     time.sleep(1)
+#     w.OpenClipboard()
+#     is_available = True
+#
+#     try:
+#         w.GetClipboardData(win32con.CF_TEXT)
+#     except Exception as e:
+#         print(e)
+#         is_available = False
+#
+#     if is_available:
+#         text = w.GetClipboardData(win32con.CF_TEXT)
+#     else:
+#         text = '该项目为空'.encode('gbk', 'xmlcharrefrepalce')
+#
+#     w.CloseClipboard()
+#     return text.decode('gbk')
+#
+#
+# def set_text(a):
+#     w.OpenClipboard()
+#     w.EmptyClipboard()
+#     w.SetClipboardData(win32con.CF_TEXT, a)
+#     w.CloseClipboard()
+#
+#
+# def copy_cell():
+#     ActionChains(driver).key_down(Keys.CONTROL).key_down('c').key_up(Keys.CONTROL).key_up('c').perform()
+#     return get_text()
 
 
 def get_cell():
@@ -485,7 +488,8 @@ if __name__ == '__main__':
 
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--ignore-certificate-errors')
-    driver = webdriver.Chrome(options=chrome_options)
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
     # driver = webdriver.Edge()
     driver.get(doc_url)  # 将健康表的地址copy过来就行。
 
