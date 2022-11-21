@@ -1,12 +1,10 @@
 # FTencentDoc
 
----
 
 一个腾讯文档自动签到的简单实现
 
 ## Requirements
 
----
 
 使用项目内的requirements.txt安装依赖
 
@@ -17,7 +15,7 @@ pip install -r requirements.txt
 
 ## Usage
 
----
+
 只需项目目录中运行即可
 ```bash
 python main.py
@@ -34,7 +32,7 @@ And here is a more general way is to run the script
 
 ## Info
 
----
+
 
 `main.py` 为主程序
 
@@ -73,7 +71,7 @@ And here is a more general way is to run the script
 
 ## Others
 
----
+
 
 ![图片](https://user-images.githubusercontent.com/76607677/200879574-4797d354-86f4-4f20-b28c-0b27fcfd7c1d.png)
 
