@@ -30,6 +30,13 @@ And here is a more general way is to run the script
 <path of python.exe> <path to main.py>
 ```
 
+### Register
+运行项目内的register.py即可
+```bash
+python register.py
+```
+
+
 ## Info
 
 
